@@ -188,3 +188,84 @@ func TestNewDeck(t *testing.T) {
 	}
 }
 ```
+
+<h3> 7. Struct in Go ( similar to Object in JavaScript ) </h3>
+
+- Declaring a struct in Go :
+- Declaring a second struct and create
+- Assigning that to a variable that has structure of first struct that includes second struct :
+- Updating value of that variable
+
+```
+type person struct {
+	firstName string
+	lastName  string
+  contactInfo contact
+}
+
+type contact struct {
+  phoneNumber string
+  countryCode string
+}
+
+func main() {
+  tri := person{firstName: "Tri", lastName: "Tran", contactInfo: contact{phoneNumber: "XXXX", countryCode: "+XX"} }
+  // declare thao variable with zero values
+  var thao person
+  // update thao struct
+  thao.firstName = "Thao"
+  thao.lastName = "Nguyen"
+  thao.contactInfo.phoneNumber = "XXXXX"
+}
+```
+
+<h3> Pointer for Struct </h3>
+
+- Pointer as the name suggesting pointing to the memory address of a value. We need a pointer to update value of a struct via receiver function. For example :
+
+```
+type person struct {
+	name string
+}
+
+func main() {
+  tri := person{ name: "Tri" }
+  tri.updateName("Frey");
+  fmt.Println(tri);
+}
+
+func (p person) updateName(name string) {
+  p.name = name;
+}
+```
+
+- The block of code above won't work because the memory address of `tri` is different from `p` even if updateName is a receiver function of person and tri is type person. Thus why we need a pointer to point `p` to `tri` so any data updated to `p`, `tri` will reflect it.
+
+```
+  // Create a pointer
+  triPointer := &tri;
+
+  // Update receiver function to use pointer for function
+  func (triPointer *person) updateName(name string) {
+    (*triPointer).name = name;
+  }
+```
+
+- There are 2 meanings to `*` :
+  - `*` before a value will tell you value that are stored at which pointer point to
+  - `*` before a type will tell you that we are working with a pointer to the type
+- `&variable` to read the memory address of the value
+- For receiver function we need to declare like `(name_of_pointer *type_that_receiver_connect_to)`
+
+<h2> IMPORTANT NOTE : </h2>
+- If you create a reciver that has a pointer point to a type, then you don't need to create a pointer like this. Go will understand it automatically and does it for you. So any updates you want to make using that receiver because it has a receiver it will update the value to the actual variable at the right memory address
+
+```
+  // Do not need to create a pointer if you use a pointer in a receiver function itself
+  triPointer := &tri;
+```
+
+<h3> Reference Types and Value Types </h3>
+
+- You have to handle `pointer` for Value Types : int, float, string, bool, struct
+- You don't have to worry about `pointer` for Reference Types : slices, maps, channels, pointers, functions
