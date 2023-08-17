@@ -269,3 +269,19 @@ func (p person) updateName(name string) {
 
 - You have to handle `pointer` for Value Types : int, float, string, bool, struct
 - You don't have to worry about `pointer` for Reference Types : slices, maps, channels, pointers, functions
+
+<h3> 8. Maps </h3>
+
+- A map is a struct where ALL key and value are the same type
+
+- To declare a map, looping through a map will have `i` as `key`
+
+```
+  colors := map[string]string {
+    "white": "#fff",
+  }
+
+  for key, value := range colors {
+    Println(key,value)
+  }
+```
