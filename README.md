@@ -285,3 +285,51 @@ func (p person) updateName(name string) {
     Println(key,value)
   }
 ```
+
+<h3> 9. Interfaces </h3>
+
+- Interface is used to reduce repetitive code in our codebase. It is a thing that holds one or many functions. A value of that interface type can hold any value that implements those functions.
+
+- Following example will show you that both triangle and square use a printArea function to print out their area even thou the formula to calculate the area may be different.
+- In order to print out area of any shape we need to be able to calculate the area of that shape so any shape we can calculate area will satisfy `Shape interface`.
+- We then create a function that will receive a variable that satisfied `Shape` to print out it area.
+- So from now on, whatever shape can satisfy `Shape interface` will be able to call `printArea`
+
+```
+package main
+
+import "fmt"
+
+type triangle struct {
+	height float64
+	base   float64
+}
+
+type square struct {
+	sideLength float64
+}
+
+type shape interface {
+	getArea() float64
+}
+
+func (t triangle) getArea() float64 {
+	return 0.5 * t.base * t.height
+}
+
+func (s square) getArea() float64 {
+	return s.sideLength * s.sideLength
+}
+
+func printArea(s shape) {
+	fmt.Println(s.getArea())
+}
+
+func main() {
+	s := square{sideLength: 10}
+	t := triangle{base: 10, height: 10}
+	printArea(s)
+	printArea(t)
+}
+
+```
