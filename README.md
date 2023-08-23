@@ -333,3 +333,54 @@ func main() {
 }
 
 ```
+
+<h3> 10. Routines and Channels </h3>
+
+- A Go Routine is a runner run our code.
+- To create a Go Routine we can call `go` keyword before any function then Golang will start a Routine to run that code for us
+
+```
+  go function()
+```
+
+- Note this is important to read to understand how a Go Routine works :
+
+```
+func main() {
+	links := []string{
+		"https://google.com",
+		"https://facebook.com",
+		"https://stackoverflow.com",
+		"https://golang.org",
+		"https://amazon.com",
+	}
+
+	for _, link := range links {
+    // Create a Go Routine
+		go checkLink(link)
+	}
+}
+
+func checkLink(link string) {
+	_, err := http.Get(link)
+
+	if err != nil {
+		fmt.Println(link + " is down!")
+		return
+	}
+
+	fmt.Println(link, "is still working fine")
+}
+```
+
+- The program above try to reach out to five websites to see if they are working or not. Without Go Routine we will have to wait it to reach out to every website line by line from top to bottom. Adding `go` keyword before `checkLink` function will create a routine it will run every code inside `checkLink` and don't make the MAIN Routine wait ( the MAIN Routine is whatever run our code with or without Go Routine ).
+- The first Go Routine will go inside `checkLink` and see they are getting block and have to wait for a response from `google.com`. So the Main Routine will keep running and this time it will create another Go Routine to check the status of `facebook.com`. Just like it's brother Go Routine the first, it also gets blocked so the Main Routine won't have to wait it because the Go Routine will run code on it owns and so on.
+- Whatever response comes back first from any websites will get Print out by the child Go Routines.
+- So in short, Go Routine saves time running our code if we don't want to wait for the response from the outa source
+
+<h4> Go Routine under the hood </h4>
+
+- Go Routines are managed with Go Scheduler, every Go Scheduler is working with a CPU to run the code and GoLang default the number of CPU it works with by 1.
+- Go Scheduler can manage multiple Go Routines and every single Go Scheduler connect to a single CPU. If we have multiple CPUs we will have multiple Go Scheduler if we configure it.
+- The reason why we need to understand this is because, Go Routines are not running in parallel as we think it is. Go Routines run it codes through a Go Scheduler on a CPU one at a time if we only have one CPU that is.
+- Says there is a Go Scheduler and 3 Go Routines connect to a CPU. It will run Go Routines code concurrently meaning that it will pick up code from Go Routine 1 and run still it get blocked then it will run Go Routine 2 code until it get blocked and now depends whether Go Routine 1 is still getting block or not if yes then it will run Go Routine 3 let's say, and so on forward.
